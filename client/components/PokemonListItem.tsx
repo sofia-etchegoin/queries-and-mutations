@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import styles from './PokemonListItem.module.css'
-
+import { deletePokemon } from '../apis/pokemon.ts'
+import { useMutation } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 interface Props {
   id: number
   name: string
@@ -9,8 +11,17 @@ export default function PokemonListItem({ id, name }: Props) {
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState(name)
 
+  const queryClient = useQueryClient()
+  const deletePokemonMutation = useMutation({
+    mutationFn: deletePokemon,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pokemon'] })
+    },
+  })
+
   const handleDeleteClick = () => {
     // TODO: submit the form to delete the pokemon
+    deletePokemonMutation.mutate({ id })
     console.log('deleting', id)
   }
 
