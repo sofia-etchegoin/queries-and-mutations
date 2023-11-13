@@ -13,8 +13,16 @@ export default function PokemonListItem({ id, name }: Props) {
   const [text, setText] = useState(name)
 
   const queryClient = useQueryClient()
+
   const deletePokemonMutation = useMutation({
     mutationFn: deletePokemon,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pokemon'] })
+    },
+  })
+
+  const renamePokemonMutation = useMutation({
+    mutationFn: renamePokemon,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pokemon'] })
     },
@@ -24,13 +32,6 @@ export default function PokemonListItem({ id, name }: Props) {
     deletePokemonMutation.mutate({ id })
     console.log('deleting', id)
   }
-
-  const renamePokemonMutation = useMutation({
-    mutationFn: renamePokemon,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pokemon'] })
-    },
-  })
 
   const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
