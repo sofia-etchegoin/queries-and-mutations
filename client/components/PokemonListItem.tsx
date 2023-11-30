@@ -55,11 +55,13 @@ export default function PokemonListItem({ id, name }: Props) {
     <div>
       {editing ? (
         <form onSubmit={handleEditSubmit} className={styles.form}>
+          <label>Name
           <input
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+          </label>
           <button type="submit">Save</button>
           <button type="button" onClick={handleStopEditingClick}>
             Stop Editing
